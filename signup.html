@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/transitions.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body>
+        <nav class="nav-menu">
+            <div class="nav-container">
+                <a href="index.html" class="nav-brand">Anasayfa</a>
+                <div class="nav-elements">
+                    <a href="birikim.html" class="nav-brand">Hesapla</a>
+                    <a href="piyasa.html"  class="nav-brand">Piyasalar</a>
+                    <a href="yapayzeka.html" class="nav-brand">Yapay Zekaya Sor</a>
+                    <a href="login.html" class="nav-auth">Giriş Yap</a>
+                    <a href="signup.html" class="nav-auth" >Kayıt Ol</a>
+                </div>
+            </div>
+        </nav>
+    
+        <div class="elegant-form-signup">
+            <h1>Kayıt Ol</h1>
+            <form action="http://localhost:3000/signup" method="POST">
+                <div class="form-group-signup">
+                    <input type="text" id="fullname" name="fullname" placeholder="Ad Soyad" required>
+                </div>
+                <div class="form-group-signup">
+                    <input type="email" id="email" name="email" placeholder="E-posta adresiniz" required>
+                </div>
+                <div class="form-group-signup">
+                    <input type="password" id="password" name="password" placeholder="Şifre" required>
+                </div>
+                <div class="form-group-signup">
+                    <input type="password" id="confirm-password" name="confirm-password" placeholder="Şifre Tekrar" required>
+                </div>
+                <div class="button-container">
+                    <button type="submit" class="btn" id="btn-signup">Kayıt Ol</button>
+                </div>
+            </form>
+            <p class="text-center">
+                Zaten hesabınız var mı? <a href="login.html">Giriş Yap</a>
+            </p>
+        </div>
+        <footer>
+            
+        </footer>
+        <script>
+            document.getElementById('signup-form').addEventListener('submit', async function(event) {
+                event.preventDefault(); // Formun normal gönderimini engelle
+            
+                const fullname = document.getElementById('fullname').value;
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+                const confirmPassword = document.getElementById('confirm-password').value;
+            
+                // Şifre ve onay şifresini karşılaştır
+                if (password !== confirmPassword) {
+                    alert("Şifreler eşleşmiyor.");
+                    return;
+                }
+            
+                // Sunucuya form verilerini gönder
+                try {
+                    const response = await fetch('http://localhost:3000/signup', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ fullname, email, password }),
+                    });
+            
+                    if (response.ok) {
+                        alert("Kayıt başarılı!");
+                        window.location.href = 'index.html'; // Giriş sayfasına yönlendirme
+                    } else {
+                        const errorMessage = await response.text();
+                        alert(errorMessage); // Hata mesajını göster
+                    }
+                } catch (error) {
+                    console.error("Hata oluştu:", error);
+                    alert("Bir hata oluştu, lütfen tekrar deneyin.");
+                }
+            });
+            
+        </script>
+    </body>
+</html>
