@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giriş Yap</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="css/transitions.css">
+</head>
+<body>
+    <nav class="nav-menu">
+        <div class="nav-container">     
+            <a href="index.html" class="nav-brand">Anasayfa</a>
+            <button type="button" id="menu-show-btn"></button>
+            <div class="nav-elements">
+                <a href="birikim.html" class="nav-brand">Hesapla</a>
+                <a href="piyasa.html"  class="nav-brand">Piyasalar</a>
+                <a href="yapayzeka.html" class="nav-brand">Yapay Zekaya Sor</a>
+                <a href="login.html" class="nav-auth">Giriş Yap</a>
+                <a href="signup.html" class="nav-auth">Kayıt Ol</a>
+            </div>
+        </div>  
+    </nav>
+    <div class="elegant-form-login">
+        <h1>Giriş Yap</h1>
+        <form id="loginForm">
+            <div class="form-group-login">
+                <input type="email" id="email" name="email" placeholder="E-posta adresiniz" required>
+            </div>      
+            <div class="form-group-login">
+                <input type="password" id="password" name="password" placeholder="Şifreniz" required>
+            </div>
+            <div class="button-container">
+                <button type="submit" class="btn" id="btn-login">Giriş Yap</button>
+            </div>
+        </form>
+        <p id="responseMessage" class="text-center"></p>
+        <p class="text-center">
+            Hesabınız yok mu? <a href="signup.html">Kayıt Ol</a>
+        </p>
+    </div>
+
+    <footer>
+        <!-- Footer içeriği buraya gelecek -->
+    </footer>
+    <div id="page-transition"></div>
+<script>
+     document.getElementById('loginForm').addEventListener('submit', async function(event) {
+            event.preventDefault(); // Formun varsayılan gönderimini durdur
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const response = await fetch('http://localhost:3000/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email, password }),
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Başarılı giriş
+                    document.getElementById('responseMessage').innerText = data.message;
+                    localStorage.setItem('token', data.token); // Token'ı yerel depolamada sakla
+                    window.location.href = 'index.html'; // Örnek yönlendirme
+                } else {
+                    // Hatalı giriş
+                    document.getElementById('responseMessage').innerText = data.message;
+                }
+            } catch (error) {
+                console.error('Giriş hatası:', error);
+                document.getElementById('responseMessage').innerText = 'E posta adresiniz veya şifreniz hatalıdır.';
+            }
+        });
+</script>
+   
+</body>
+</html>
